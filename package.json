@@ -34,5 +34,9 @@
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0",
     "mocha": "^2.3.4"
+  },
+  "dependencies": {
+    "nappy": "git+https://github.com/rainvg/nappy.git",
+    "request": "^2.69.0"
   }
 }
