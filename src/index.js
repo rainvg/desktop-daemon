@@ -1,54 +1,53 @@
-var potty = require(process.env.POTTY).app;
 var electron = require('electron');
 
 var nappy = require('nappy');
 var request = require('request');
 var path = require('path');
+var os = require('os');
 
-var version = require(path.resolve(__dirname, '..', 'package.json')).version;
+var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
-var settings = {update: {interval: 300000}};
-
-function __update__()
+module.exports = function(potty)
 {
-  'use strict';
+  var settings = {update: {interval: 300000}};
 
-  nappy.wait.connection().then(function()
+  (function __update__()
   {
-    request('https://rain.vg/releases/desktop/' + process.platform + '-' + process.arch + '/package', function(error, response, body)
+    'use strict';
+
+    nappy.wait.for(settings.update.interval).then(nappy.wait.connection).then(function()
     {
-      if(!error && response.statusCode === 200 && JSON.parse(body).version !== version)
+      request('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/production/package', function(error, response, body)
       {
-        potty.update().then(function()
+        if(!error && response.statusCode === 200 && JSON.parse(body).version !== pkg.version)
         {
-          electron.app.exit(0);
-        });
-      }
+          potty.update().then(function()
+          {
+            electron.app.exit(0);
+          });
+        }
 
-      nappy.wait.for(settings.update.interval).then(__update__);
+        __update__();
+      });
     });
+  })();
+
+  var appIcon = null;
+
+  electron.app.on('ready', function()
+  {
+    'use strict';
+
+    appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
+
+    var contextMenu = electron.Menu.buildFromTemplate([
+      {label: 'Rain version ' + pkg.version},
+      {type: 'separator'},
+      {label: '❤ for contributing!'}
+    ]);
+
+    appIcon.setToolTip('Rain');
+    appIcon.setContextMenu(contextMenu);
   });
-}
 
-potty.setup().then(function()
-{
-  'use strict';
-
-  nappy.wait.for(settings.update.interval).then(__update__);
-});
-
-var appIcon = null;
-
-electron.app.on('ready', function()
-{
-  'use strict';
-
-  appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
-  var contextMenu = electron.Menu.buildFromTemplate([
-    {label: 'Rain version ' + version},
-    {type: 'separator'},
-    {label: '❤ for contributing!'}
-  ]);
-  appIcon.setToolTip('Rain');
-  appIcon.setContextMenu(contextMenu);
-});
+};
