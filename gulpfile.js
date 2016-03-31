@@ -27,27 +27,27 @@ try
     sshConfig: ssh_config
   });
 
-  gulp.task('delete_modules', function()
+  gulp.task('delete_node_modules', function()
   {
-    return gulp_delete(['node_modules']);
+    return gulp_delete(['node_node_modules']);
   });
 
-  gulp.task('install_dependencies', ['delete_modules'], function()
+  gulp.task('install_dependencies', ['delete_node_modules'], function()
   {
     return gulp.src(['./package.json']).pipe(install({production: true}));
   });
 
-  gulp.task('pack', ['install_dependencies'], function()
+  gulp.task('zip', ['install_dependencies'], function()
   {
     return gulp.src(['*', '!.git*', '!.jshint', '!gulpfile.js']).pipe(zip(package.version + '.zip')).pipe(gulp.dest('tmp/'));
   });
 
-  gulp.task('transfer', ['pack'], function()
+  gulp.task('scp', ['zip'], function()
   {
     return gulp.src(['tmp/**/*']).pipe(ssh.dest(path.resolve(remote_path, 'versions/')));
   });
 
-  gulp.task('edit_json', ['transfer'], function()
+  gulp.task('package_deploy', ['scp'], function()
   {
     var distro_package = {
       'version': package.version,
@@ -62,19 +62,19 @@ try
     });
   });
 
-  gulp.task('install_dev_dependencies', ['edit_json'], function()
+  gulp.task('restore_dev_dependencies', ['package_deploy'], function()
   {
     return gulp.src(['./package.json']).pipe(install({
       args: ['--onley=dev']
     }));
   });
 
-  gulp.task('delete_temp_files', ['install_dev_dependencies'], function()
+  gulp.task('delete_tmp', ['restore_dev_dependencies'], function()
   {
     return gulp_delete(['tmp']);
   });
 
-  gulp.task('deploy', ['delete_temp_files'], function()
+  gulp.task('deploy', ['delete_tmp'], function()
   {
   });
 }
