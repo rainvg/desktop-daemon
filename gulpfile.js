@@ -39,7 +39,7 @@ try
 
   gulp.task('zip', ['install_dependencies'], function()
   {
-    return gulp.src(['*', '!.git*', '!.jshint', '!gulpfile.js']).pipe(zip(package.version + '.zip')).pipe(gulp.dest('tmp/'));
+    return gulp.src(['./**/*', '!.git*', '!.jshint*', '!gulpfile.js', '!.sshrc']).pipe(zip(package.version + '.zip')).pipe(gulp.dest('tmp/'));
   });
 
   gulp.task('scp', ['zip'], function()
@@ -65,7 +65,7 @@ try
   gulp.task('restore_dev_dependencies', ['package_deploy'], function()
   {
     return gulp.src(['./package.json']).pipe(install({
-      args: ['--onley=dev']
+      args: ['--only=dev']
     }));
   });
 
@@ -85,7 +85,7 @@ catch(e)
 
 // Lint tasks
 
-gulp.task('default', ['lint','test', 'minify'], function()
+gulp.task('default', ['lint', 'test', 'minify'], function()
 {
 });
 
