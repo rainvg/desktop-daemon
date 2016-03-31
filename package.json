@@ -45,6 +45,6 @@
   "dependencies": {
     "fancy-log": "^1.2.0",
     "nappy": "git+https://github.com/rainvg/nappy.git",
-    "request": "^2.69.0"
+    "needle": "^1.0.0"
   }
 }
