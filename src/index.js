@@ -1,14 +1,14 @@
-var electron = require('electron');
-
-var nappy = require('nappy');
-var request = require('request');
-var path = require('path');
-var os = require('os');
-
-var pkg = require(path.resolve(__dirname, '..', 'package.json'));
-
 module.exports = function(potty)
 {
+  var electron = require('electron');
+
+  var nappy = require('nappy');
+  var request = require('request');
+  var path = require('path');
+  var os = require('os');
+
+  var pkg = require(path.resolve(__dirname, '..', 'package.json'));
+
   var settings = {update: {interval: 300000}};
 
   (function __update__()
@@ -32,22 +32,15 @@ module.exports = function(potty)
     });
   })();
 
-  var appIcon = null;
+  var appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
 
-  electron.app.on('ready', function()
-  {
-    'use strict';
+  var contextMenu = electron.Menu.buildFromTemplate([
+    {label: 'Rain version ' + pkg.version},
+    {type: 'separator'},
+    {label: '❤ for contributing!'}
+  ]);
 
-    appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
-
-    var contextMenu = electron.Menu.buildFromTemplate([
-      {label: 'Rain version ' + pkg.version},
-      {type: 'separator'},
-      {label: '❤ for contributing!'}
-    ]);
-
-    appIcon.setToolTip('Rain');
-    appIcon.setContextMenu(contextMenu);
-  });
+  appIcon.setToolTip('Rain');
+  appIcon.setContextMenu(contextMenu);
 
 };
