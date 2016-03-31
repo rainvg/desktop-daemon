@@ -9,7 +9,8 @@
     "git-add": "git add .",
     "git-commit": "git commit -m",
     "commit": "gulp && npm run git-add && npm run git-commit",
-    "push": "git push origin master"
+    "push": "git push origin master",
+    "deploy": "gulp deploy"
   },
   "repository": {
     "type": "git",
@@ -26,16 +27,24 @@
   },
   "homepage": "https://github.com/rainvg/desktop-daemon#readme",
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-exec": "^2.1.2",
+    "gulp-if": "^2.0.0",
+    "gulp-install": "^0.6.0",
     "gulp-jshint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-rename": "^1.2.2",
+    "gulp-ssh": "^0.5.5",
     "gulp-uglify": "^1.5.1",
+    "gulp-zip": "^3.2.0",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "yargs": "^4.3.2"
   },
   "dependencies": {
+    "fancy-log": "^1.2.0",
     "nappy": "git+https://github.com/rainvg/nappy.git",
     "request": "^2.69.0"
   }
