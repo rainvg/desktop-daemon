@@ -20,7 +20,7 @@ var gulp  = require('gulp'),
 try
 {
   var ssh_config = JSON.parse(fs.readFileSync('.sshrc', 'utf8'));
-  var remote_path = path.resolve('/home/rain/website/app/releases/', package.name, os.type().toLowerCase() + '-' + os.arch(), argv.production ? 'production/' : 'development/');
+  var remote_path = '/home/rain/website/app/releases/' + package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + argv.production ? 'production/' : 'development/';
   var endpoint = 'https://rain.vg/releases/' +  package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + (argv.production ? 'production/' : 'development/');
 
   var ssh = new gulp_ssh({
@@ -44,7 +44,7 @@ try
 
   gulp.task('scp', ['zip'], function()
   {
-    return gulp.src(['tmp/**/*']).pipe(ssh.dest(path.resolve(remote_path, 'versions/')));
+    return gulp.src(['tmp/**/*']).pipe(ssh.dest(remote_path + '/versions/'));
   });
 
   gulp.task('package_deploy', ['scp'], function()
