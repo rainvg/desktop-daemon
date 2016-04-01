@@ -3,7 +3,7 @@ module.exports = function(potty)
   var electron = require('electron');
 
   var nappy = require('nappy');
-  var needle = require('request');
+  var needle = require('needle');
   var path = require('path');
   var os = require('os');
 
