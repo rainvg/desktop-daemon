@@ -46,6 +46,14 @@ var __setup__ = function()
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Rain version ' + pkg.version},
     {type: 'separator'},
+    {label: 'Quit', click: function()
+    {
+      _potty.shutdown().then(function()
+      {
+        electron.app.exit(0);
+      });
+    }},
+    {type: 'separator'},
     {label: '❤ for contributing!'}
   ]);
 
