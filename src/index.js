@@ -45,8 +45,6 @@ var __setup__ = function()
 
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Rain version ' + pkg.version},
-    {label: 'Hello monsino!'},
-    {label: 'Ci sono!'},
     {type: 'separator'},
     {label: '❤ for contributing!'}
   ]);
