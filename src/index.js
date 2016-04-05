@@ -24,7 +24,7 @@ var __update__ = function()
 
   nappy.wait.for(settings.update.interval).then(nappy.wait.connection).then(function()
   {
-    needle.get('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/production/package', function(error, response)
+    needle.get('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/development/package', function(error, response)
     {
       if(!error && response.statusCode === 200 && JSON.parse(response.body).version !== pkg.version)
       {
@@ -45,6 +45,8 @@ var __setup__ = function()
 
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Rain version ' + pkg.version},
+    {label: 'Hello monsino!'},
+    {label: 'Ci sono!'},
     {type: 'separator'},
     {label: '❤ for contributing!'}
   ]);

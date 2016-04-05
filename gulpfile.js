@@ -28,7 +28,7 @@ try
 
   gulp.task('delete_node_modules', function()
   {
-    return gulp_delete(['node_node_modules']);
+    return gulp_delete(['node_modules']);
   });
 
   gulp.task('install_dependencies', ['delete_node_modules'], function()
