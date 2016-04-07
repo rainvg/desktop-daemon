@@ -64,3 +64,6 @@ Temporary Items
 
 # Private configuration files
 .sshrc
+
+# Bower components
+resources/components

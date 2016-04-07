@@ -31,12 +31,17 @@ try
     return gulp_delete(['node_modules']);
   });
 
-  gulp.task('install_dependencies', ['delete_node_modules'], function()
+  gulp.task('install_npm_dependencies', ['delete_node_modules'], function()
   {
     return gulp.src(['./package.json']).pipe(install({production: true}));
   });
 
-  gulp.task('zip', ['install_dependencies'], function()
+  gulp.task('install_bower_dependencies', ['install_npm_dependencies'], function()
+  {
+    return gulp.src(['./bower.json']).pipe(install());
+  });
+
+  gulp.task('zip', ['install_bower_dependencies'], function()
   {
     return gulp.src(['./**/*', '!.git*', '!.jshint*', '!gulpfile.js', '!.sshrc']).pipe(zip(package.version + '.zip')).pipe(gulp.dest('tmp/'));
   });

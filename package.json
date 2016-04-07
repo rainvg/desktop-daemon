@@ -1,6 +1,6 @@
 {
   "name": "desktop-daemon",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/index.min.js",
   "scripts": {
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/rainvg/desktop-daemon#readme",
   "devDependencies": {
+    "bower": "^1.7.9",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-exec": "^2.1.2",

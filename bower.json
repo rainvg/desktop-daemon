@@ -1,0 +1,26 @@
+{
+  "name": "desktop-daemon",
+  "description": "",
+  "main": "dist/index.min.js",
+  "authors": [
+    "rain.vg team (https://github.com/rainvg)"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "desktop-daemon",
+    "rain"
+  ],
+  "homepage": "https://github.com/rainvg/desktop-daemon",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "^1.0.7"
+  }
+}
