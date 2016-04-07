@@ -1,0 +1,73 @@
+body
+{
+  -webkit-font-smoothing: antialiased;
+
+  background-color: #222;
+  color: #FFFFFF;
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+
+  -webkit-app-region: drag;
+}
+
+.lead
+{
+  font-size: 21px;
+}
+
+h1
+{
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: .70em .7em;
+  font-weight: 300;
+  align-items: center;
+  margin-top: 45px;
+}
+
+p
+{
+  margin: 0;
+}
+
+h3
+{
+  margin: 0;
+}
+
+h1 img
+{
+  width: 50px;
+  height: 65px;
+  display: inline-block;
+  float: left;
+  margin-right: 20px;
+}
+
+#download_section button
+{
+  margin-bottom: 20px;
+   -webkit-app-region: no-drag;
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar)
+{
+  background-color: #222222;
+}
+
+a.md-button.md-default-theme.md-raised, a.md-button.md-raised, .md-button.md-default-theme.md-raised, .md-button.md-raised
+{
+  background-color: #222222;
+  color: #FFFFFF
+}
+
+a.md-button.md-default-theme.md-raised:not([disabled]):hover, a.md-button.md-raised:not([disabled]):hover, .md-button.md-default-theme.md-raised:not([disabled]):hover, .md-button.md-raised:not([disabled]):hover
+{
+  background-color: #292828;
+}
+
+form
+{
+  text-align: center;
+}
