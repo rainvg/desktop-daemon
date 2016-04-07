@@ -1,6 +1,6 @@
 {
   "name": "desktop-daemon",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "",
   "main": "dist/index.min.js",
   "scripts": {
@@ -46,6 +46,7 @@
   "dependencies": {
     "fancy-log": "^1.2.0",
     "nappy": "git+https://github.com/rainvg/nappy.git",
-    "needle": "^1.0.0"
+    "needle": "^1.0.0",
+    "node-notifier": "^4.5.0"
   }
 }

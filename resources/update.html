@@ -1,30 +1,66 @@
 <!doctype html>
-<html lang="en" >
+<html lang = "en" >
 <head>
   <title>Rain</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name = "viewport" content = "width=device-width, initial-scale=1">
   <!-- Angular Material style sheet -->
-  <link rel="stylesheet" href="components/angular-material/angular-material.css">
-  <link href="styles/css/update.css" rel="stylesheet" type="text/css">
+  <link rel = "stylesheet" href="components/angular-material/angular-material.css">
+  <link href = "styles/css/update.css" rel = "stylesheet" type = "text/css">
+  <link href = "https://fonts.googleapis.com/css?family=Lato:300,400%7CRaleway:100,400,300,500,600,700%7COpen+Sans:400,500,600" rel="stylesheet" type="text/css">
 </head>
-<body ng-app="update-available" ng-cloak>
 
-  <p>
-    New update available message goes here...
-  </p>
+<body ng-app = "update-available" ng-cloak>
+  <md-toolbar class = "md-primary" layout = "row">
+    <h1 class = "head" flex>
+      {{ "Update Available" | uppercase }}
+      <img src = "logo@5x.png" />
+    </h1>
+  </md-toolbar>
+
+  <div layout="column">
+    <md-content flex layout-padding>
+      <h3>Trees never sleep!</h3>
+      <p>
+        Our volunteers at Rain are constantly working to make our service faster and easier and Earth greener!
+      </p>
+      <p>
+        While most of the updates will be automatically handled by our client, sometimes we need your help to install our new version: the time has come to show once again that a click is never going to stop you!
+      </p>
+      <p>
+        Click the following link to proceed to the download, and follow the instructions to install our brand new, shiny client.
+      </p>
+    </md-content>
+    <md-content class="md-padding">
+      <form id = "download_section" ng-controller = "downloadController">
+         <md-button class="md-raised md-default" ng-click = "download()">
+            Download latest version {{test}}
+         </md-button>
+      </form>
+    </md-content>
+  </div>
 
   <!-- Angular Material requires Angular.js Libraries -->
-  <script src="components/angular/angular.min.js"></script>
-  <script src="components/angular-animate/angular-animate.min.js"></script>
-  <script src="components/angular-aria/angular-aria.min.js"></script>
-  <script src="components/angular-messages/angular-messages.min.js"></script>
+  <script src = "components/angular/angular.min.js"></script>
+  <script src = "components/angular-animate/angular-animate.min.js"></script>
+  <script src = "components/angular-aria/angular-aria.min.js"></script>
+  <script src = "components/angular-messages/angular-messages.min.js"></script>
 
   <!-- Angular Material Library -->
-  <script src="components/angular-material/angular-material.min.js"></script>
+  <script src = "components/angular-material/angular-material.min.js"></script>
 
   <!-- Your application bootstrap  -->
-  <script type="text/javascript">
-    angular.module('update-available', ['ngMaterial']);
+  <script type = "text/javascript">
+
+    const shell = require('electron').shell;
+
+    angular.module('update-available', ['ngMaterial']).controller('downloadController', function($scope)
+    {
+      $scope.download = function()
+      {
+        shell.openExternal('https://docs.angularjs.org/api/ng/directive/ngController');
+        window.close();
+      };
+    });
   </script>
 
 </body>
