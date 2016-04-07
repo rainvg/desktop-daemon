@@ -4,9 +4,14 @@ var nappy = require('nappy');
 var needle = require('needle');
 var path = require('path');
 var os = require('os');
-var notifier = require('node-notifier');
+//var notifier = require('node-notifier');
 
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
+
+electron.dialog.showErrorBox = function(title, content)
+{
+  console.log('[ErrorBox', title, '-', content, ']');
+};
 
 // Settings
 
@@ -20,6 +25,7 @@ var _windows = {};
 
 // Private methods
 
+/*
 var __notify_update__ = function()
 {
   notifier.notify({
@@ -29,6 +35,7 @@ var __notify_update__ = function()
     wait: true
   });
 };
+*/
 
 var __update__ = function()
 {
@@ -89,24 +96,28 @@ var __setup__ = function()
 
   if(_potty.version === '1.0.0')
   {
+    /*
     notifier.on('click', function ()
     {
-      _windows.update = new electron.BrowserWindow({
-        title: 'Rain - Update available!',
-        width: 615,
-        height: 458,
-        resizable: false,
-        center: true,
-        titleBarStyle: 'hidden-inset'
-      });
-      _windows.update.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'update.html'));
+    });
+    */
 
-      _windows.update.on('closed', function()
-      {
-        delete _windows.update;
-      });
+    _windows.update = new electron.BrowserWindow({
+      title: 'Rain - Update available!',
+      width: 615,
+      height: 458,
+      resizable: false,
+      center: true,
+      titleBarStyle: 'hidden-inset'
+    });
+    _windows.update.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'update.html'));
+
+    _windows.update.on('closed', function()
+    {
+      delete _windows.update;
     });
 
+    /*
     notifier.on('timeout', function ()
     {
       nappy.wait.for(1000 * 60 * 10).then(function()
@@ -116,6 +127,7 @@ var __setup__ = function()
     });
 
     __notify_update__();
+    */
   }
 };
 
