@@ -15,6 +15,7 @@ var settings = {update: {interval: 300000}};
 
 var _potty;
 var _appIcon;
+var _windows = {};
 
 // Private methods
 
@@ -41,6 +42,20 @@ var __update__ = function()
 
 var __setup__ = function()
 {
+  electron.app.on('window-all-closed', function()
+  {
+    if(process.platform === 'darwin')
+      electron.app.dock.hide();
+  });
+
+  electron.app.on('will-quit', function(event)
+  {
+    event.preventDefault();
+
+    if(process.platform === 'darwin')
+      electron.app.dock.hide();
+  });
+
   _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
 
   var contextMenu = electron.Menu.buildFromTemplate([
@@ -50,6 +65,7 @@ var __setup__ = function()
     {
       _potty.shutdown().then(function()
       {
+        console.log('Shutting down, goodbye.');
         electron.app.exit(0);
       });
     }},
@@ -59,6 +75,17 @@ var __setup__ = function()
 
   _appIcon.setToolTip('Rain');
   _appIcon.setContextMenu(contextMenu);
+
+  if(_potty.version === '1.0.0')
+  {
+    _windows.update = new electron.BrowserWindow({width: 800, height: 600});
+    _windows.update.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'update.html'));
+
+    _windows.update.on('closed', function()
+    {
+      delete _windows.update;
+    });
+  }
 };
 
 module.exports = function(potty)
