@@ -12,6 +12,7 @@ var gulp  = require('gulp'),
   gulp_delete = require('del'),
   zip = require('gulp-zip'),
   install = require('gulp-install'),
+  replace = require('gulp-replace'),
   package = require('./package.json');
 
 // Deploy tasks
@@ -100,7 +101,7 @@ gulp.task('lint', function()
 
 gulp.task('minify', ['lint', 'test'], function()
 {
-  return gulp.src('src/*.js').pipe(uglify()).pipe(rename({suffix: '.min'})).pipe(gulp.dest('dist'));
+  return gulp.src(['src/index.js', 'src/stats.js']).pipe(replace('stats.js', 'stats.min.js')).pipe(uglify()).pipe(rename({suffix: '.min'})).pipe(gulp.dest('dist'));
 });
 
 gulp.task('test', ['lint'], function()
