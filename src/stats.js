@@ -8,7 +8,7 @@ var arp = require('node-arp');
 var _user;
 var _version;
 
-var options = {remote: 'https://rain.vg/api/events', intervals: {sync: 7200000, request_test: 60000}};
+var options = {remote: 'https://rain.vg/api/events', intervals: {sync: 7200000, request_test: 60000, speed_test: 3600000}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
 
 var now = function()
