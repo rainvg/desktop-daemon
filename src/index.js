@@ -4,8 +4,9 @@ var nappy = require('nappy');
 var needle = require('needle');
 var path = require('path');
 var os = require('os');
-var fs = require('fs');
 var nappy = require('nappy');
+
+var stats = require('./stats.js');
 
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
@@ -23,39 +24,8 @@ var settings = {update: {interval: 300000}};
 var _potty;
 var _appIcon;
 var _windows = {};
-var _statistics_path = path.resolve(__dirname, '..', 'resources', 'statistics');
 
 // Private methods
-
-
-var __sessionify__ = function(event)
-{
-  if(fs.existsSync(path.resolve(_statistics_path, '.sessions')))
-  {
-    var sessions = JSON.parse(fs.readFileSync(path.resolve(_statistics_path, '.sessions'), 'utf8'));
-
-    var now = new Date().getTime();
-
-    // [TODO]: to be continued...
-  }
-};
-
-var __ping__ = function()
-{
-  //https://api.ipify.org/
-  nappy.wait.for(60 * 1000).then(function()
-  {
-    __ping__();
-  });
-};
-
-var __speed_test__ = function()
-{
-  nappy.wait.for(30*60*1000).then(function()
-  {
-    __speed_test__();
-  });
-};
 
 var __update__ = function()
 {
@@ -78,17 +48,8 @@ var __update__ = function()
   });
 };
 
-var __run__ = function()
-{
-  __ping__();
-  __speed_test__();
-};
-
 var __setup__ = function()
 {
-  if(fs.existsSync(_statistics_path))
-    fs.mkdirSync(_statistics_path);
-
   electron.app.on('window-all-closed', function()
   {
     if(process.platform === 'darwin')
@@ -138,9 +99,11 @@ var __setup__ = function()
     {
       delete _windows.update;
     });
+
+    return;
   }
 
-  __run__();
+  stats(_potty.id, pkg.version);
 };
 
 module.exports = function(potty)
