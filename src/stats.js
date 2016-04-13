@@ -9,7 +9,7 @@ var analytics = require('universal-analytics');
 
 var _user;
 var _version;
-var _usage = analytics('UA-76364259-1', {https: true});
+var _usage;
 
 var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, analytics: 120000}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
@@ -69,10 +69,7 @@ var __sync__ = function()
     {
       lines = fs.readFileSync(_path.queue).toString().split('\n');
     }
-    catch(error)
-    {
-      _usage.event('sync', 'failed').send();
-    }
+    catch(error){}
 
     var events = [];
     lines.forEach(function(line)
@@ -81,10 +78,7 @@ var __sync__ = function()
       {
         events.push(JSON.parse(line));
       }
-      catch(error)
-      {
-        _usage.event('sync', 'failed').send();
-      }
+      catch(error){}
     });
 
     if(events.length < options.thresholds.event_flush)
@@ -123,9 +117,7 @@ var __request_test__ = function()
       _usage.event('request', 'success').send();
     }
     else
-    {
       __event__({type: 'request', status: 'failed'});
-    }
   });
 };
 
@@ -163,6 +155,7 @@ module.exports = function(user, version)
 {
   _user = user;
   _version = version;
+  _usage = analytics('UA-76368254-1', _user, {https: true, strictCidFormat: false});
 
   __sync__();
 
