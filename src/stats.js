@@ -5,11 +5,13 @@ var nappy = require('nappy');
 var network = require('network');
 var arp = require('node-arp');
 var speedtest = require('speedtest-net');
+var analytics = require('universal-analytics');
 
 var _user;
 var _version;
+var _usage = analytics('UA-76364259-1', {https: true});
 
-var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000}};
+var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, analytics: 120000}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
 
 var now = function()
@@ -54,6 +56,7 @@ var __sync__ = function()
 {
   nappy.wait.connection().then(function()
   {
+    _usage.event('sync', 'try').send();
     try
     {
       fs.appendFileSync(_path.queue, fs.readFileSync(_path.buffer));
@@ -65,7 +68,11 @@ var __sync__ = function()
     try
     {
       lines = fs.readFileSync(_path.queue).toString().split('\n');
-    } catch(error) {}
+    }
+    catch(error)
+    {
+      _usage.event('sync', 'failed').send();
+    }
 
     var events = [];
     lines.forEach(function(line)
@@ -74,7 +81,10 @@ var __sync__ = function()
       {
         events.push(JSON.parse(line));
       }
-      catch(error) {}
+      catch(error)
+      {
+        _usage.event('sync', 'failed').send();
+      }
     });
 
     if(events.length < options.thresholds.event_flush)
@@ -88,10 +98,13 @@ var __sync__ = function()
           try
           {
             fs.unlinkSync(_path.queue);
+            _usage.event('sync', 'success').send();
           }
-          catch(error) {}
+          catch(error)
+          {
+            _usage.event('sync', 'failed').send();
+          }
         }
-
         nappy.wait.for(options.intervals.sync).then(__sync__);
       });
     }
@@ -106,10 +119,13 @@ var __request_test__ = function()
     if(!error && response.statusCode === 200 && /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/.test(response.body))
     {
       var time = new Date().getTime() - start;
-        __event__({type: 'request', status: 'success', public_ip: response.body, data: {time: time}});
+      __event__({type: 'request', status: 'success', public_ip: response.body, data: {time: time}});
+      _usage.event('request', 'success').send();
     }
     else
-        __event__({type: 'request', status: 'failed'});
+    {
+      __event__({type: 'request', status: 'failed'});
+    }
   });
 };
 
@@ -117,12 +133,15 @@ var __speed_test__ = function()
 {
   var test = speedtest({maxTime: 5000});
 
+  _usage.event('speed_test', 'try').send();
+
   test.on('data', function(data)
   {
     test.removeAllListeners('data');
     test.on('data', function(){});
 
     __event__({type: 'speed', status: 'success', data: data});
+    _usage.event('speed_test', 'success').send();
   });
 
   test.on('error', function()
@@ -131,7 +150,13 @@ var __speed_test__ = function()
     test.on('error', function(){});
 
     __event__({type: 'speed', status: 'failed'});
+    _usage.event('speed_test', 'failed').send();
   });
+};
+
+var __analytics_ack__ = function()
+{
+  _usage.event('event', 'new').send();
 };
 
 module.exports = function(user, version)
@@ -143,4 +168,5 @@ module.exports = function(user, version)
 
   setInterval(__request_test__, options.intervals.request_test);
   setInterval(__speed_test__, options.intervals.speed_test);
+  setInterval(__analytics_ack__, options.intervals.analytics);
 };
