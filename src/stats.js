@@ -9,7 +9,7 @@ var speedtest = require('speedtest-net');
 var _user;
 var _version;
 
-var options = {remote: 'https://rain.vg/api/events', intervals: {sync: 7200000, request_test: 60000, speed_test: 3600000}};
+var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
 
 var now = function()
@@ -77,7 +77,7 @@ var __sync__ = function()
       catch(error) {}
     });
 
-    if(!(events.length))
+    if(events.length < options.thresholds.event_flush)
       nappy.wait.for(options.intervals.sync).then(__sync__);
     else
     {
@@ -129,7 +129,7 @@ var __speed_test__ = function()
   {
     test.removeAllListeners('error');
     test.on('error', function(){});
-    
+
     __event__({type: 'speed', status: 'failed'});
   });
 };
