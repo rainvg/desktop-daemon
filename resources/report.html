@@ -29,15 +29,15 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Your name</label>
-            <input required ng-model="report.reporter" id="name"></div>
+            <input required ng-model="report.reporter" id="name" ng-disabled="sent"></div>
           </md-input-container>
 
           <md-input-container class="md-block">
               <label>Description of the error</label>
-              <textarea md-no-autogrow ng-model="report.description" md-maxlength="300" rows="5" md-select-on-focus></textarea>
+              <textarea md-no-autogrow ng-model="report.description" md-maxlength="300" rows="5" ng-disabled="sent" md-select-on-focus></textarea>
           </md-input-container>
-          <md-button type="submit" class="md-raised">Send report</md-button>
 
+          <md-button type="submit" class="md-raised" ng-disabled="sent">Send report</md-button>
           <md-content layout-gt-xm="row" layout-padding ng-show="sent">
             <h3>Thank you for your support!</h3>
           </md-content>

@@ -22,8 +22,11 @@ angular.module('report', ['ngMaterial', 'remote']).controller('reportController'
         var _filenames = fs.readdirSync(directory);
         for(var i = 0; i < _filenames.length; i++)
         {
-          var _log = fs.readFileSync(path.resolve(directory, _filenames[i]), 'utf-8');
-          _report_logs.push({'timestamp': _filenames[i], 'content':_log});
+          if(!isNaN(_filenames[i]))
+          {
+            var _log = fs.readFileSync(path.resolve(directory, _filenames[i]), 'utf-8');
+            _report_logs.push({'timestamp': _filenames[i], 'content':_log});
+          }
         }
 
         resolve(_report_logs);
