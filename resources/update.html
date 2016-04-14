@@ -48,21 +48,8 @@
   <!-- Angular Material Library -->
   <script src = "components/angular-material/angular-material.min.js"></script>
 
-  <!-- Your application bootstrap  -->
-  <script type = "text/javascript">
-
-    const shell = require('electron').shell;
-
-    // Get os and architecture and set download url consistently
-    angular.module('update-available', ['ngMaterial']).controller('downloadController', function($scope)
-    {
-      $scope.download = function()
-      {
-        shell.openExternal('https://docs.angularjs.org/api/ng/directive/ngController');
-        window.close();
-      };
-    });
-  </script>
+  <!-- Main app  -->
+  <script type = "text/javascript" src="controllers/updateAvailable.js">
 
 </body>
 </html>

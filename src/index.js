@@ -68,7 +68,26 @@ var __setup__ = function()
 
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Rain version ' + pkg.version},
-    {label: '❤ for contributing!'},
+    {label: '❤ for con-tree-buting!'},
+    {type: 'separator'},
+    {label: 'Send a report', click: function()
+    {
+      _windows.report = new electron.BrowserWindow({
+        title: 'Rain - Send a report!',
+        width: 700,
+        height: 600,
+        resizable: false,
+        center: true,
+        titleBarStyle: 'hidden-inset'
+      });
+
+      _windows.report.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'report.html'));
+
+      _windows.report.on('closed', function()
+      {
+        delete _windows.report;
+      });
+    }},
     {type: 'separator'},
     {label: 'Quit', click: function()
     {

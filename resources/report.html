@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang = "en" >
+<head>
+  <title>Rain</title>
+  <meta name = "viewport" content = "width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+
+  <!-- Angular Material style sheet -->
+  <link rel = "stylesheet" href="components/angular-material/angular-material.css">
+  <link href = "styles/css/report.css" rel = "stylesheet" type = "text/css">
+  <link href = "https://fonts.googleapis.com/css?family=Lato:300,400%7CRaleway:100,400,300,500,600,700%7COpen+Sans:400,500,600" rel="stylesheet" type="text/css">
+</head>
+
+<body ng-app = "report" ng-cloak>
+  <md-toolbar class = "md-primary" layout = "row">
+    <h1 class = "head" flex>
+      {{ "Send a report" | uppercase }}
+      <img src = "logo@5x.png" />
+    </h1>
+  </md-toolbar>
+
+  <div layout="column" ng-cloak class="md-inline-form" ng-controller = "reportController">
+    <md-content layout-gt-sm="row" layout-padding>
+      <div>
+        <h3>Thank you for your con-tree-bution! ❤</h3>
+        <p>Please let us know your name, the error that occured and the steps that led to it.</p>
+      </div>
+      <form name="report" ng-submit="send()">
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Your name</label>
+            <input required ng-model="report.reporter" id="name"></div>
+          </md-input-container>
+
+          <md-input-container class="md-block">
+              <label>Description of the error</label>
+              <textarea md-no-autogrow ng-model="report.description" md-maxlength="300" rows="5" md-select-on-focus></textarea>
+          </md-input-container>
+          <md-button type="submit" class="md-raised">Send report</md-button>
+
+          <md-content layout-gt-xm="row" layout-padding ng-show="sent">
+            <h3>Thank you for your support!</h3>
+          </md-content>
+        </div>
+      </form>
+    </md-content>
+  </div>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src = "components/angular/angular.min.js"></script>
+  <script src = "components/angular-animate/angular-animate.min.js"></script>
+  <script src = "components/angular-aria/angular-aria.min.js"></script>
+  <script src = "components/angular-messages/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src = "components/angular-material/angular-material.min.js"></script>
+
+  <!-- Custom libraries -->
+  <script src = "services/rest.js"></script>
+
+  <!-- Main app  -->
+  <script src = "controllers/report.js"></script>
+
+</body>
+</html>
