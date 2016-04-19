@@ -187,14 +187,14 @@ var __ws_test__ = function()
 
       ws.on('error', function()
       {
-        __event__({type: 'ws', status: 'failed'});
-        _usage.event('ws', 'failed').send();
+        __event__({type: 'ws', status: 'ws-failed'});
+        _usage.event('ws', 'ws-failed').send();
       });
     }
     else
     {
-      __event__({type: 'ws', status: 'failed'});
-      _usage.event('ws', 'failed').send();
+      __event__({type: 'ws', status: 'connection-failed'});
+      _usage.event('ws', 'connection-failed').send();
     }
   });
 };
