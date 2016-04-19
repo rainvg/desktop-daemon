@@ -6,12 +6,14 @@ var network = require('network');
 var arp = require('node-arp');
 var speedtest = require('speedtest-net');
 var analytics = require('universal-analytics');
+var web_socket = require('ws');
 
 var _user;
 var _version;
 var _usage;
 
-var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, analytics: 120000}};
+var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, ws_test: 30000, analytics: 120000}};
+var endpoints = {ws: {remote: 'https://rain.vg/api/ws/remote'}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
 
 var now = function()
@@ -151,6 +153,52 @@ var __analytics_ack__ = function()
   _usage.event('event', 'new').send();
 };
 
+var __ws_test__ = function()
+{
+  _usage.event('ws', 'try').send();
+  needle.get(endpoints.ws.remote, {json: true}, function(error, response)
+  {
+    if(!error && response.statusCode === 200)
+    {
+      var server = response.body;
+      var ws  = new web_socket('ws://' + server.ip + ':7000');
+
+      var time = {start: new Date().getTime()};
+
+      ws.on('open', function()
+      {
+        time.connection = new Date().getTime() - time.start;
+
+        ws.on('message', function(data)
+        {
+          time.message = new Date().getTime() - time.start;
+          if(data.toString() === 'Hello World!')
+          {
+            __event__({type: 'ws', status: 'success', data: {time: {connection: time.connection, message: time.message}}});
+            _usage.event('ws', 'success').send();
+          }
+          else
+          {
+            __event__({type: 'ws', status: 'corrupted', data: {time: {connection: time.connection, message: time.message}}});
+            _usage.event('ws', 'corrupted').send();
+          }
+        });
+      });
+
+      ws.on('error', function()
+      {
+        __event__({type: 'ws', status: 'failed'});
+        _usage.event('ws', 'failed').send();
+      });
+    }
+    else
+    {
+      __event__({type: 'ws', status: 'failed'});
+      _usage.event('ws', 'failed').send();
+    }
+  });
+};
+
 module.exports = function(user, version)
 {
   _user = user;
@@ -161,5 +209,7 @@ module.exports = function(user, version)
 
   setInterval(__request_test__, options.intervals.request_test);
   setInterval(__speed_test__, options.intervals.speed_test);
+  setInterval(__ws_test__, options.intervals.ws_test);
   setInterval(__analytics_ack__, options.intervals.analytics);
+
 };

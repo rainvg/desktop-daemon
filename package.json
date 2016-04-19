@@ -1,6 +1,6 @@
 {
   "name": "desktop-daemon",
-  "version": "1.3.2",
+  "version": "1.3.5",
   "description": "",
   "main": "dist/index.min.js",
   "scripts": {
@@ -52,6 +52,7 @@
     "node-arp": "^1.0.5",
     "rimraf": "^2.5.2",
     "speedtest-net": "^1.2.5",
-    "universal-analytics": "^0.3.11"
+    "universal-analytics": "^0.3.11",
+    "ws": "^1.1.0"
   }
 }
