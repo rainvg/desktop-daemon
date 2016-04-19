@@ -22,7 +22,7 @@ try
   var ssh_config = JSON.parse(fs.readFileSync('.sshrc', 'utf8'));
   var scheme = argv.production ? 'production/' : (argv.development ? 'development/' : 'buggy/');
   var remote_path = '/home/rain/website/app/releases/' + package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + scheme;
-  var endpoint = 'https://rain.vg/releases/' +  package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + (argv.production ? 'production/' : 'development/');
+  var endpoint = 'https://rain.vg/releases/' +  package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + scheme;
 
   var ssh = new gulp_ssh({
     sshConfig: ssh_config
