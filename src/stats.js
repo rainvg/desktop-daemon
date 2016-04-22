@@ -204,6 +204,7 @@ module.exports = function(user, version)
   _user = user;
   _version = version;
   _usage = analytics('UA-76368254-1', _user, {https: true, strictCidFormat: false});
+  _usage.event('Rain client started', _version).send();
 
   __sync__();
 
