@@ -204,9 +204,16 @@ var __get_cpu_model__ = function()
 {
   try
   {
-    var cpu_info = os.cpus();
-    _usage.event('Processor', cpu_info[0].model).send();
-    __event__({type: 'processor', status: 'success', data: cpu_info});
+    var data = {
+      cpus: os.cpus(),
+      os: {
+        platform: os.platform(),
+        arch: os.arch(),
+        release: os.release(),
+      }
+    };
+    _usage.event('Processor', '[' + data.os.platform + '-' + data.os.arch + '] - ' + data.cpus[0].model).send();
+    __event__({type: 'processor', status: 'success', data: data});
   } catch(error)
   {
     _usage.event('Processor', 'failed').send();
