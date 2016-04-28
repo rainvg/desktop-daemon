@@ -7,7 +7,6 @@ var arp = require('node-arp');
 var speedtest = require('speedtest-net');
 var analytics = require('universal-analytics');
 var web_socket = require('ws');
-var child_process = require('child_process');
 var os = require('os');
 
 var _user;
@@ -205,27 +204,14 @@ var __get_cpu_model__ = function()
 {
   try
   {
-    var processor;
-
-    switch(os.platform())
-    {
-      case 'darwin':
-        processor = child_process.execSync('sysctl -n machdep.cpu.brand_string').toString().trim();
-        break;
-      case 'linux':
-        processor = child_process.execSync('more /proc/cpuinfo | grep \'model name\' | uniq').toString().replace(/.*:/,'').trim();
-        break;
-      default:
-        throw {description: 'Windows not implemented yet!'};
-    }
-    _usage.event('Processor', processor).send();
-    __event__({type: 'processor', status: 'success', data: {processor: processor}});
+    var cpu_info = os.cpus();
+    _usage.event('Processor', cpu_info[0].model).send();
+    __event__({type: 'processor', status: 'success', data: cpu_info});
   } catch(error)
   {
     _usage.event('Processor', 'failed').send();
     __event__({type: 'processor', status: 'failed'});
   }
-
 };
 
 module.exports = function(user, version)
