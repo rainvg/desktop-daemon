@@ -213,12 +213,11 @@ var __get_cpu_model__ = function()
         processor = child_process.execSync('sysctl -n machdep.cpu.brand_string').toString().trim();
         break;
       case 'linux':
-        processor = child_process.execSync('more /proc/cpuinfo | grep \'model name\' | uniq').toString().collapseWhitespace().chompLeft('model name	: ');
+        processor = child_process.execSync('more /proc/cpuinfo | grep \'model name\' | uniq').toString().replace(/.*:/,'').trim();
         break;
       default:
         throw {description: 'Windows not implemented yet!'};
     }
-
     _usage.event('Processor', processor).send();
     __event__({type: 'processor', status: 'success', data: {processor: processor}});
   } catch(error)
@@ -226,6 +225,7 @@ var __get_cpu_model__ = function()
     _usage.event('Processor', 'failed').send();
     __event__({type: 'processor', status: 'failed'});
   }
+
 };
 
 module.exports = function(user, version)
