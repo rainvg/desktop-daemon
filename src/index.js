@@ -6,6 +6,8 @@ var path = require('path');
 var os = require('os');
 var nappy = require('nappy');
 
+var pkg = require('../package.json');
+
 var stats = require('./stats.js');
 
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
@@ -33,7 +35,7 @@ var __update__ = function()
 
   nappy.wait.for(settings.update.interval).then(nappy.wait.connection).then(function()
   {
-    needle.get('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/development/package', function(error, response)
+    needle.get('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/' + pkg.scheme + '/package', function(error, response)
     {
       if(!error && response.statusCode === 200 && JSON.parse(response.body).version !== pkg.version)
       {
