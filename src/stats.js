@@ -15,7 +15,7 @@ var _user;
 var _version;
 var _usage;
 
-var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, ws_test: 30000, analytics: 120000, cpu_power_consumption_test: 600000}};
+var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, ws_test: 30000, analytics: 120000, cpu_power_consumption_test: 600000}, cpu_test: {time_interval: 100}};
 var endpoints = {ws: {remote: 'https://rain.vg/api/ws/remote'}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
 
@@ -251,7 +251,7 @@ var __cpu_power_consumption_test__ = function()
               else
                 resolve(cpusamples);
             });
-          }, 100);
+          }, options.cpu_test.time_interval);
         };
         doit();
       });
@@ -285,5 +285,7 @@ module.exports = function(user, version)
   setInterval(__speed_test__, options.intervals.speed_test);
   setInterval(__ws_test__, options.intervals.ws_test);
   setInterval(__analytics_ack__, options.intervals.analytics);
-  setInterval(__cpu_power_consumption_test__, options.intervals.cpu_power_consumption_test);
+
+  if(os.platform !== 'win32')
+    setInterval(__cpu_power_consumption_test__, options.intervals.cpu_power_consumption_test);
 };
