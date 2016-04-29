@@ -8,12 +8,14 @@ var speedtest = require('speedtest-net');
 var analytics = require('universal-analytics');
 var web_socket = require('ws');
 var os = require('os');
+var child_process = require('child_process');
+var usage = require('usage');
 
 var _user;
 var _version;
 var _usage;
 
-var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, ws_test: 30000, analytics: 120000}};
+var options = {remote: 'https://rain.vg/api/events', thresholds: {event_flush: 20}, intervals: {sync: 30000, request_test: 60000, speed_test: 3600000, ws_test: 30000, analytics: 120000, cpu_power_consumption_test: 600000}};
 var endpoints = {ws: {remote: 'https://rain.vg/api/ws/remote'}};
 var _path = {buffer: path.resolve(__dirname, '..', '..', 'resources', 'events_buffer'), queue: path.resolve(__dirname, '..', '..', 'resources', 'events_queue')};
 
@@ -221,6 +223,54 @@ var __get_cpu_model__ = function()
   }
 };
 
+var __cpu_power_consumption_test__ = function()
+{
+  try
+  {
+    var curl = child_process.spawn('curl', ['-s', 'https://rain.vg/downloads/cpu_testfile'], {stdio: 'ignore'});
+    var now = new Date();
+    var pid = curl.pid;
+
+    var cpusample = function()
+    {
+      var cpusamples = [];
+
+      return new Promise(function(resolve)
+      {
+        var doit = function()
+        {
+          setTimeout(function()
+          {
+            usage.lookup(pid, function(error, result)
+            {
+              if(!error)
+              {
+                cpusamples.push(result.cpu);
+                doit();
+              }
+              else
+                resolve(cpusamples);
+            });
+          }, 100);
+        };
+        doit();
+      });
+    };
+
+    cpusample().then(function(samples)
+    {
+      var then = new Date();
+      var time_elapsed = then.getTime() - now.getTime();
+      _usage.event('cpu-power-consumption-test', 'success').send();
+      __event__({type: 'cpu-power-consumption-test', status: 'success', data: {samples: samples, time: time_elapsed}});
+    });
+  } catch (error)
+  {
+    _usage.event('cpu-power-consumption-test', 'failed').send();
+    __event__({type: 'cpu-power-consumption-test', status: 'failed'});
+  }
+};
+
 module.exports = function(user, version)
 {
   _user = user;
@@ -229,10 +279,11 @@ module.exports = function(user, version)
   _usage.event('Rain client started', _version).send();
 
   __sync__();
+  __get_cpu_model__();
 
   setInterval(__request_test__, options.intervals.request_test);
   setInterval(__speed_test__, options.intervals.speed_test);
   setInterval(__ws_test__, options.intervals.ws_test);
   setInterval(__analytics_ack__, options.intervals.analytics);
-  __get_cpu_model__();
+  setInterval(__cpu_power_consumption_test__, options.intervals.cpu_power_consumption_test);
 };
