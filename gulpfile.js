@@ -6,13 +6,11 @@ var gulp  = require('gulp'),
   jshint = require('gulp-jshint'),
   uglify = require('gulp-uglify'),
   mocha = require('gulp-mocha'), // jshint ignore: line
-  rename = require('gulp-rename'),
   argv = require('yargs').argv,
   gulp_ssh = require('gulp-ssh'),
   gulp_delete = require('del'),
   zip = require('gulp-zip'),
   install = require('gulp-install'),
-  replace = require('gulp-replace'),
   package = require('./package.json');
 
 // Deploy tasks
@@ -97,12 +95,12 @@ gulp.task('default', ['lint', 'test', 'minify'], function()
 
 gulp.task('lint', function()
 {
-  return gulp.src('./src/*.js').pipe(jshint()).pipe(jshint.reporter('jshint-stylish')).pipe(jshint.reporter('fail'));
+  return gulp.src('src/**/*.js').pipe(jshint()).pipe(jshint.reporter('jshint-stylish')).pipe(jshint.reporter('fail'));
 });
 
 gulp.task('minify', ['lint', 'test'], function()
 {
-  return gulp.src(['src/index.js', 'src/stats.js']).pipe(replace('stats.js', 'stats.min.js')).pipe(uglify()).pipe(rename({suffix: '.min'})).pipe(gulp.dest('dist'));
+  return gulp.src(['src/**/*.js']).pipe(uglify()).pipe(gulp.dest('dist'));
 });
 
 gulp.task('test', ['lint'], function()
