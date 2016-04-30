@@ -46,6 +46,6 @@
   "dependencies": {
     "nappy": "git+https://github.com/rainvg/nappy.git",
     "needle": "^1.0.0",
-    "universal-analytics": "^0.3.11",
+    "universal-analytics": "^0.3.11"
   }
 }
