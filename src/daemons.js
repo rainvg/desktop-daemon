@@ -4,6 +4,10 @@ var needle = require('needle');
 var nappy = require('nappy');
 var universal_analytics = require('universal-analytics');
 
+// Daemons
+
+var battery_charge = require('./daemons/battery-charge.js');
+
 // Members
 
 var _user;
@@ -100,6 +104,10 @@ module.exports = function(user, version)
   analytics.client.event('start', _version).send();
 
   setInterval(analytics.keepalive, settings.intervals.analytics);
+
+  // Daemons
+
+  battery_charge(events, analytics);
 
   events.sync();
 };

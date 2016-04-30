@@ -1,8 +1,7 @@
 'use strict';
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
-var rimraf = require('rimraf');
 
 angular.module('report', ['ngMaterial', 'remote']).controller('reportController', ['$scope', 'rest', function($scope, $rest)
 {
@@ -57,7 +56,7 @@ angular.module('report', ['ngMaterial', 'remote']).controller('reportController'
       $rest.post_report(_report).success(function()
       {
         $scope.sent = true;
-        rimraf(_log_path, function(error)
+        fs.remove(_log_path, function(error)
         {
           if(!error)
           {
