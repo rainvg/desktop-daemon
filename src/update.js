@@ -20,15 +20,11 @@ var __update__ = function()
 
   nappy.wait.for(settings.update.interval).then(nappy.wait.connection).then(function()
   {
-    console.log('Looking for updates..');
-    console.log('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/' + pkg.scheme + '/package');
     needle.get('https://rain.vg/releases/' + pkg.name + '/' + os.type().toLowerCase() + '-' + os.arch().toLowerCase() + '/' + pkg.scheme + '/package', function(error, response)
     {
-      console.log('Response is', response.body);
-
       if(!error && response.statusCode === 200 && JSON.parse(response.body.toString()).version !== pkg.version)
       {
-        console.log('Updating.');
+        console.log('Update available.');
         _potty.update().then(function()
         {
           electron.app.exit(0);
