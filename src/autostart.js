@@ -9,7 +9,6 @@ function __run__()
 
   var login_item = new autolaunch({
     name: 'Rain',
-    path: '/Applications/Rain.app',
     isHidden: true
   });
 
@@ -33,6 +32,6 @@ function __run__()
 module.exports = function autostart()
 {
   'use strict';
-  
+
   __run__();
 };
