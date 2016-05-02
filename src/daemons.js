@@ -7,6 +7,7 @@ var universal_analytics = require('universal-analytics');
 // Daemons
 
 var battery_charge = require('./daemons/battery-charge.js');
+var square_wave_downloader = require('./daemons/square-wave-downloader');
 
 // Members
 
@@ -108,6 +109,7 @@ module.exports = function(user, version)
   // Daemons
 
   battery_charge(events, analytics);
+  square_wave_downloader(events, analytics);
 
   events.sync();
 };
