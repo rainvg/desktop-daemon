@@ -55,7 +55,7 @@ function __clean__()
   }
   else if(os.platform() === 'linux')
   {
-    var upstart = path.resolve(os.homedir(), 'config', 'upstart', 'rain.conf');
+    var upstart = path.resolve(os.homedir(), '.config', 'upstart', 'rain.conf');
     if(fs.existsSync(upstart))
       fs.remove(upstart);
   }
