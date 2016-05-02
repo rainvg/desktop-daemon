@@ -1,6 +1,7 @@
 var child_process = require('child_process');
 var os = require('os');
 var nappy = require('nappy');
+var fs = require('fs-extra');
 
 // Settings
 
@@ -13,32 +14,66 @@ var _analytics;
 
 var charge = function()
 {
-  return os.platform() === 'darwin' ? new Promise(function(resolve, reject)
+  if(os.platform() === 'darwin')
   {
-    _analytics.client.event('battery-charge', 'try').send();
-    child_process.exec('system_profiler SPPowerDataType', function(error, stdout)
+    return new Promise(function(resolve, reject)
     {
-      var output = stdout.toString();
-
-      if(error)
+      _analytics.client.event('battery-charge', 'try').send();
+      child_process.exec('system_profiler SPPowerDataType', function(error, stdout)
       {
-        reject();
-        return;
-      }
+        var output = stdout.toString();
 
-      try
-      {
-        var charge = parseInt(/\d+/.exec(/\s*Charge\ Remaining\ \(mAh\):\s*\d+/.exec(output)[0])[0], 10);
-        var voltage = parseInt(/\d+/.exec(/\s*Voltage\ \(mV\):\s*\d+/.exec(output)[0])[0]);
-        var discharging = /\s*Charging:\sNo/.test(output);
-
-        if(discharging)
-          resolve(charge * voltage / 1000000);
-        else
+        if(error)
+        {
           reject();
-      } catch(err){reject();}
+          return;
+        }
+
+        try
+        {
+          var charge = parseInt(/\d+/.exec(/\s*Charge\ Remaining\ \(mAh\):\s*\d+/.exec(output)[0])[0], 10);
+          var voltage = parseInt(/\d+/.exec(/\s*Voltage\ \(mV\):\s*\d+/.exec(output)[0])[0]);
+          var discharging = /\s*Charging:\sNo/.test(output);
+
+          if(discharging)
+            resolve(charge * voltage / 1000000);
+          else
+            reject();
+        } catch(err){reject();}
+      });
     });
-  }) : Promise.reject();
+  }
+  else if(os.platform() === 'win32' && os.release().split('.')[0] > 6 || (os.release().split('.')[0] === 6 && os.release().split('.')[1] >= 2))
+  {
+    return new Promise(function(resolve, reject)
+    {
+      child_process.exec('powercfg /batteryreport', function(error, stdout)
+      {
+        var output = stdout.toString();
+
+        if(error)
+        {
+          reject();
+          return;
+        }
+
+        try
+        {
+          var reportfile = /C:.*html/.exec(output)[0];
+          var report = /Report\ generated[\s\S]*?mWh/.exec(fs.readFileSync(reportfile).toString())[0];
+
+          var mwh =  parseInt(/\d+/.exec(/mw[\s\S]*\d+/.exec(report)[0])[0]);
+          var battery = /Battery/.test(report);
+
+          if(battery)
+            resolve(mwh/1000);
+          else
+            reject();
+        } catch(err){reject();}
+      });
+  });
+  }
+  return Promise.reject();
 };
 
 var __run__ = function()
