@@ -49,6 +49,7 @@
     "fs-extra": "^0.30.0",
     "nappy": "git+https://github.com/rainvg/nappy.git",
     "needle": "^1.0.0",
-    "universal-analytics": "^0.3.11"
+    "universal-analytics": "^0.3.11",
+    "winreg": "^1.2.0"
   }
 }
