@@ -4,6 +4,7 @@ var electron = require('electron');
 var daemons = require('./daemons.js');
 var update = require('./update.js');
 var tray = require('./tray.js');
+var autostart = require('./autostart.js');
 
 var pkg = require('../package.json');
 
@@ -23,6 +24,8 @@ var _potty;
 module.exports = function(potty)
 {
   _potty = potty;
+
+  autostart();
 
   tray(_potty);
   update(_potty);

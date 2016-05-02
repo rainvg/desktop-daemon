@@ -2,7 +2,7 @@
   "name": "desktop-daemon",
   "version": "1.4.1",
   "description": "",
-  "scheme": "development",
+  "scheme": "buggy",
   "main": "dist/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha test/index.js",
@@ -44,6 +44,7 @@
     "yargs": "^4.3.2"
   },
   "dependencies": {
+    "auto-launch": "^2.0.1",
     "fancy-log": "^1.2.0",
     "fs-extra": "^0.30.0",
     "nappy": "git+https://github.com/rainvg/nappy.git",
