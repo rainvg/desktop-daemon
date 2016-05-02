@@ -23,7 +23,7 @@ function __run__()
 function __clean__()
 {
   'use strict';
-  
+
   if(os.platform() === 'darwin')
   {
     var plist = path.resolve(os.homedir(), 'Library', 'LaunchAgents', 'vg.rain.osx.plist');
@@ -52,6 +52,12 @@ function __clean__()
         }
       }
     });
+  }
+  else if(os.platform() === 'linux')
+  {
+    var upstart = path.resolve(os.homedir(), 'config', 'upstart', 'rain.conf');
+    if(fs.existsSync(upstart))
+      fs.remove(upstart);
   }
 }
 
