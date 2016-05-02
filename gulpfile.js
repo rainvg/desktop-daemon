@@ -11,6 +11,7 @@ var gulp  = require('gulp'),
   gulp_delete = require('del'),
   zip = require('gulp-zip'),
   install = require('gulp-install'),
+  jeditor = require('gulp-json-editor'),
   package = require('./package.json');
 
 // Deploy tasks
@@ -18,15 +19,22 @@ var gulp  = require('gulp'),
 try
 {
   var ssh_config = JSON.parse(fs.readFileSync('.sshrc', 'utf8'));
-  var scheme = argv.production ? 'production/' : (argv.development ? 'development/' : 'buggy/');
-  var remote_path = '/home/rain/website/app/releases/' + package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + scheme;
-  var endpoint = 'https://rain.vg/releases/' +  package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + scheme;
+  var scheme = argv.production ? 'production' : (argv.development ? 'development' : 'buggy');
+  var remote_path = '/home/rain/website/app/releases/' + package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + scheme + '/';
+  var endpoint = 'https://rain.vg/releases/' +  package.name + '/' + os.type().toLowerCase() + '-' + os.arch() + '/' + scheme + '/';
 
   var ssh = new gulp_ssh({
     sshConfig: ssh_config
   });
 
-  gulp.task('delete_node_modules', function()
+  gulp.task('change_scheme', function()
+  {
+    gulp.src('./package.json').pipe(jeditor({
+      'scheme': scheme
+    })).pipe(gulp.dest('.'));
+  });
+
+  gulp.task('delete_node_modules', ['change_scheme'], function()
   {
     return gulp_delete(['node_modules']);
   });
