@@ -1,0 +1,1 @@
+"use strict";var autostart=require("auto-launch"),login_item=new autostart({name:"Rain",isHidden:!0});login_item.isEnabled().then(function(t){t||login_item.enable()});
