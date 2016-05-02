@@ -1,6 +1,6 @@
 {
   "name": "desktop-daemon",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "",
   "scheme": "buggy",
   "main": "dist/index.js",
