@@ -13,7 +13,7 @@ var _analytics;
 
 var download = function()
 {
-  return os.platform() === 'darwin' ? new Promise(function(resolve, reject)
+  return (os.platform() === 'darwin' || os.platform() === 'win32') ? new Promise(function(resolve, reject)
   {
     try
     {
