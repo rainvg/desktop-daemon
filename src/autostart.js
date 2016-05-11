@@ -8,15 +8,31 @@ function __run__()
 {
   'use strict';
 
+  var rain_path = {
+    'darwin': path.resolve(process.argv[0], '..', '..', '..'),
+    'win32': process.argv[0]
+  }[os.platform()];
+
   var login_item = new autolaunch({
     name: 'Rain',
+    path: rain_path,
     isHidden: true
   });
 
-  login_item.isEnabled().then(function(enabled)
+  login_item.enable();
+}
+
+function __clean__login_item__()
+{
+  return new Promise(function(resolve)
   {
-    if(enabled) return;
-    login_item.enable();
+    var old_login_item = new autolaunch({
+      name: 'Rain',
+      isHidden: true
+    });
+
+    old_login_item.disable();
+    resolve();
   });
 }
 
@@ -24,47 +40,55 @@ function __clean__()
 {
   'use strict';
 
-  if(os.platform() === 'darwin')
+  return new Promise(function(resolve)
   {
-    var plist = path.resolve(os.homedir(), 'Library', 'LaunchAgents', 'vg.rain.osx.plist');
-    if(fs.existsSync(plist))
-      fs.remove(plist);
-  }
-  else if(os.platform() === 'win32')
-  {
-    var registry_entry = new registry({
-      hive: registry.HKCU,
-      key: '\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders'
-    });
-
-    registry_entry.values(function(error, items)
+    if(os.platform() === 'darwin')
     {
-      if(!error)
+      var plist = path.resolve(os.homedir(), 'Library', 'LaunchAgents', 'vg.rain.osx.plist');
+      if(fs.existsSync(plist))
+        fs.remove(plist);
+
+      resolve();
+    }
+    else if(os.platform() === 'win32')
+    {
+      var registry_entry = new registry({
+        hive: registry.HKCU,
+        key: '\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders'
+      });
+
+      registry_entry.values(function(error, items)
       {
-        for (var i=0; i < items.length; i++)
+        if(!error)
         {
-          if(items[i].name === 'Startup')
+          for (var i=0; i < items.length; i++)
           {
-            var rain_link = path.join(items[i].value, 'Rain.lnk');
-            if(fs.existsSync(rain_link))
-              fs.remove(rain_link);
+            if(items[i].name === 'Startup')
+            {
+              var rain_link = path.join(items[i].value, 'Rain.lnk');
+              if(fs.existsSync(rain_link))
+                fs.remove(rain_link);
+            }
           }
         }
-      }
-    });
-  }
-  else if(os.platform() === 'linux')
-  {
-    var upstart = path.resolve(os.homedir(), '.config', 'upstart', 'rain.conf');
-    if(fs.existsSync(upstart))
-      fs.remove(upstart);
-  }
+
+        resolve();
+      });
+    }
+    else if(os.platform() === 'linux')
+    {
+      var upstart = path.resolve(os.homedir(), '.config', 'upstart', 'rain.conf');
+      if(fs.existsSync(upstart))
+        fs.remove(upstart);
+
+      resolve();
+    }
+  });
 }
 
 module.exports = function autostart()
 {
   'use strict';
 
-  __run__();
-  __clean__();
+  __clean__login_item__().then(__clean__).then(__run__);
 };
