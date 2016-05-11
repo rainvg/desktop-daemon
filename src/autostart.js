@@ -20,7 +20,12 @@ function __run__()
     isHidden: true
   });
 
-  login_item.enable();
+  login_item.isEnabled().then(function(enabled)
+  {
+    if(enabled) return;
+
+    return login_item.enable();
+  });
 }
 
 function __clean__login_item__()
@@ -32,8 +37,12 @@ function __clean__login_item__()
       isHidden: true
     });
 
-    old_login_item.disable();
-    resolve();
+    old_login_item.isEnabled().then(function(enabled)
+    {
+      if(!enabled) return;
+
+      return old_login_item.disable();
+    }).then(resolve);
   });
 }
 
