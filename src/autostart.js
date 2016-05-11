@@ -10,7 +10,8 @@ function __run__()
 
   var rain_path = {
     'darwin': path.resolve(process.argv[0], '..', '..', '..'),
-    'win32': process.argv[0]
+    'win32': process.argv[0],
+    'linux': process.argv[0]
   }[os.platform()];
 
   var login_item = new autolaunch({
