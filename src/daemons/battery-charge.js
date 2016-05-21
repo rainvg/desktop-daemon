@@ -47,7 +47,7 @@ var charge = function()
   {
     return new Promise(function(resolve, reject)
     {
-      child_process.exec('powercfg /batteryreport', function(error, stdout)
+      child_process.exec('cd ' + os.tmpdir() + ' & powercfg /batteryreport', function(error, stdout)
       {
         var output = stdout.toString();
 
@@ -62,11 +62,11 @@ var charge = function()
           var reportfile = /C:.*html/.exec(output)[0];
           var report = /Report\ generated[\s\S]*?mWh/.exec(fs.readFileSync(reportfile).toString())[0];
 
-          var mwh =  parseInt(/\d+/.exec(/mw[\s\S]*\d+/.exec(report)[0])[0]);
+          var wh =  parseInt(/\d+/.exec(/mw[\s\S]*\d+/.exec(report)[0])[0]);
           var battery = /Battery/.test(report);
 
           if(battery)
-            resolve(mwh/1000);
+            resolve(wh);
           else
             reject();
         } catch(err){reject();}

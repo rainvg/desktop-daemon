@@ -1,8 +1,8 @@
 {
   "name": "desktop-daemon",
-  "version": "1.4.17",
+  "version": "1.4.18",
   "description": "",
-  "scheme": "buggy",
+  "scheme": "development",
   "main": "dist/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha test/index.js",
