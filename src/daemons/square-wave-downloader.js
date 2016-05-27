@@ -7,19 +7,6 @@ var needle = require('needle');
 
 var settings = {period: 3600000, interval: 30000, size: 1048576, endpoint:'https://rain.vg/downloads/cpu_testfile', path: path.resolve(__dirname, '..', '..', '..', 'resources', 'cpu_testfile'), needle: {open_timeout: 5000, read_timeout: 20000}};
 
-var __merge_settings__ = function(a, b)
-{
-  var c = {};
-
-  for(var attr in a)
-    c[attr] = a[attr];
-
-  for(var attr in b)
-    c[attr] = b[attr];
-
-  return c;
-};
-
 // Members
 
 var _events;
@@ -31,23 +18,21 @@ var download = function()
 {
   return (os.platform() === 'darwin' || os.platform() === 'win32') ? new Promise(function(resolve, reject)
   {
-    try
+    needle.get(settings.endpoint, settings.needle, function(error, response)
     {
-      fs.unlinkSync(settings.path);
-    } catch(error){}
+      if(error || response.statusCode !== 200)
+      {
+        reject();
+        return;
+      }
 
-    try
-    {
-      fs.statSync(settings.path);
-      reject();
-      return;
-    } catch(error){}
-
-    needle.get(settings.endpoint, __merge_settings__(settings.needle, {output: settings.path}), function()
-    {
       try
       {
-        if(fs.statSync(settings.path).size === settings.size)
+        fs.writeFileSync(settings.path, response.body);
+        var file_size = fs.statSync(settings.path).size;
+        fs.unlinkSync(settings.path);
+
+        if(file_size === settings.size)
           resolve();
         else
           reject();
