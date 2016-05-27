@@ -1,5 +1,5 @@
 var path = require('path');
-var fs = require('fs');
+var fs = require('fs-extra');
 var needle = require('needle');
 var nappy = require('nappy');
 var universal_analytics = require('universal-analytics');
