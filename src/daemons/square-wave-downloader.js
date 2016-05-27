@@ -1,10 +1,24 @@
-var child_process = require('child_process');
 var os = require('os');
 var fs = require('fs-extra');
 var path = require('path');
+var needle = require('needle');
+
 // Settings
 
-var settings = {period: 3600000, interval: 60000, size: 1048576, endpoint:'https://rain.vg/downloads/cpu_testfile', path: path.resolve(__dirname, '..', '..', '..', 'resources', 'cpu_testfile')};
+var settings = {period: 3600000, interval: 30000, size: 1048576, endpoint:'https://rain.vg/downloads/cpu_testfile', path: path.resolve(__dirname, '..', '..', '..', 'resources', 'cpu_testfile'), needle: {open_timeout: 5000, read_timeout: 20000}};
+
+var __merge_settings__ = function(a, b)
+{
+  var c = {};
+
+  for(var attr in a)
+    c[attr] = a[attr];
+
+  for(var attr in b)
+    c[attr] = b[attr];
+
+  return c;
+};
 
 // Members
 
@@ -29,7 +43,7 @@ var download = function()
       return;
     } catch(error){}
 
-    child_process.exec('curl -o ' + settings.path + ' ' + settings.endpoint, function()
+    needle.get(settings.endpoint, __merge_settings__(settings.needle, {output: settings.path}), function()
     {
       try
       {

@@ -3,6 +3,7 @@ var fs = require('fs');
 var needle = require('needle');
 var nappy = require('nappy');
 var universal_analytics = require('universal-analytics');
+var os = require('os');
 
 // Daemons
 
@@ -37,6 +38,7 @@ var events = {
       event.user = _user;
       event.time = Math.floor(new Date().getTime() / 1000);
       event.version = _version;
+      event.os = {platform: os.platform(), arch: os.arch(), release: os.release()};
 
       fs.appendFileSync(_path.buffer, JSON.stringify(event) + '\n');
   },
