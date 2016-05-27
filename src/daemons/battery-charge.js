@@ -33,7 +33,7 @@ var charge = function()
         {
           var charge = parseInt(/\d+/.exec(/\s*Charge\ Remaining\ \(mAh\):\s*\d+/.exec(output)[0])[0], 10);
           var voltage = parseInt(/\d+/.exec(/\s*Voltage\ \(mV\):\s*\d+/.exec(output)[0])[0]);
-          var discharging = /\s*Charging:\sNo/.test(output);
+          var discharging = /\s*Connected:\sNo/.test(output);
 
           if(discharging)
             resolve(charge * voltage / 1000000);
