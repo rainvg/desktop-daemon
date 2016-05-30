@@ -1,6 +1,6 @@
 {
   "name": "desktop-daemon",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "",
   "scheme": "buggy",
   "main": "dist/index.js",
@@ -57,7 +57,7 @@
     "universal-analytics": "^0.3.11",
     "winreg": "^1.2.0"
   },
-  "optionalDependencies":{
+  "optionalDependencies": {
     "node-mac-notifier": "0.0.5"
   }
 }

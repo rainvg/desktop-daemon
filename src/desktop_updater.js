@@ -42,11 +42,10 @@ var __check__ = function()
         else
         {
           var message = (os.platform() === 'linux') ? 'New Rain version available! Click on the Rain icon and check for update!' : 'New Rain version available! Click here to download it!';
-          var icon = (os.platform() === 'windows') ? 'logo@2x.png' : 'logo@5x.png';
           notifier.notify({
             title: 'Update available!',
             message: message,
-            icon: path.resolve(__dirname, '..', 'resources', icon),
+            icon: path.resolve(__dirname, '..', 'resources', 'logo.png'),
             sound: true,
             wait: true
           }, function ()

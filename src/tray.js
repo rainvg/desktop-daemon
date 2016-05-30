@@ -42,7 +42,7 @@ module.exports = function(potty)
       _windows.report = new electron.BrowserWindow({
         title: 'Rain - Send a report!',
         width: 700,
-        height: 600,
+        height: (process.platform === 'win32') ? 650 : 600,
         resizable: false,
         center: true,
         titleBarStyle: 'hidden-inset'
@@ -62,7 +62,7 @@ module.exports = function(potty)
       _windows.update = new electron.BrowserWindow({
         title: 'Rain - Update Available!',
         width: 690,
-        height: 480,
+        height: (process.platform === 'win32') ? 530 : 480,
         resizable: false,
         center: true,
         titleBarStyle: 'hidden-inset'
@@ -82,6 +82,10 @@ module.exports = function(potty)
       potty.shutdown().then(function()
       {
         console.log('Shutting down, goodbye.');
+
+        for(var window in _windows)
+          _windows[window].close();
+          
         electron.app.exit(0);
       });
     }}
