@@ -9,34 +9,63 @@
   <link href = "https://fonts.googleapis.com/css?family=Lato:300,400%7CRaleway:100,400,300,500,600,700%7COpen+Sans:400,500,600" rel="stylesheet" type="text/css">
 </head>
 
-<body ng-app = "update-available" ng-cloak>
-  <md-toolbar class = "md-primary" layout = "row">
-    <h1 class = "head" flex>
-      {{ "Update Available" | uppercase }}
-      <img src = "logo@5x.png" />
-    </h1>
-  </md-toolbar>
+<body ng-app = "update" ng-cloak style="background-color:#2A2826">
+  <div ng-controller = "downloadController">
+    <div id="loader" ng-show="!ready" style="text-align: center">
+      <img src="loading.gif" style="margin-top:10%; width:70%" />
+    </div>
+    <div ng-show="update_available && ready">
+      <md-toolbar class = "md-primary" layout = "row">
+        <h1 class = "head" flex>
+          {{ "Update Available!" | uppercase }}
+          <img src = "logo@5x.png" />
+        </h1>
+      </md-toolbar>
 
-  <div layout="column">
-    <md-content flex layout-padding>
-      <h3>Trees never sleep!</h3>
-      <p>
-        Our volunteers at Rain are constantly working to make our service faster and easier and Earth greener!
-      </p>
-      <p>
-        While most of the updates will be automatically handled by our client, sometimes we need your help to install our new version: the time has come to show once again that a click is never going to stop you!
-      </p>
-      <p>
-        Click the following link to proceed to the download, and follow the instructions to install our brand new, shiny client.
-      </p>
-    </md-content>
-    <md-content class="md-padding">
-      <form id = "download_section" ng-controller = "downloadController">
-         <md-button class="md-raised md-default" ng-click = "download()">
-            Download latest version {{test}}
-         </md-button>
-      </form>
-    </md-content>
+      <div layout="column">
+        <md-content flex layout-padding>
+          <h3>Trees never sleep!</h3>
+          <p>
+            Our volunteers at Rain are constantly working to make our service faster and easier and Earth greener!
+          </p>
+          <p>
+            While most of the updates will be automatically handled by our client, sometimes we need your help to install our new version: the time has come to show once again that a click is never going to stop you!
+          </p>
+          <p>
+            Click the following link to proceed to the download, and follow the instructions to install our brand new, shiny client.
+          </p>
+        </md-content>
+        <md-content class="md-padding">
+          <form id = "download_section">
+             <md-button class="md-raised md-default" ng-click = "download()">
+                Download latest version {{test}}
+             </md-button>
+          </form>
+        </md-content>
+      </div>
+    </div>
+    <div ng-show="!update_available && ready">
+      <md-toolbar class = "md-primary" layout = "row">
+        <h1 class = "head" flex>
+          {{ "You are up to date" | uppercase }}
+          <img src = "logo@5x.png" />
+        </h1>
+      </md-toolbar>
+
+      <div layout="column" style="height: 280px">
+        <md-content flex layout-padding>
+          <h3>YEEEEE!</h3>
+          <p>
+            Our volunteers at Rain are constantly working to make our service faster and easier and Earth greener!
+          </p>
+          <p>
+            While most of the updates will be automatically handled by our client, sometimes we need your help to install our new version: the time has come to show once again that a click is never going to stop you!
+          </p>
+          <p>
+            Click the following link to proceed to the download, and follow the instructions to install our brand new, shiny client.
+          </p>
+        </md-content>
+    </div>
   </div>
 
   <!-- Angular Material requires Angular.js Libraries -->
@@ -49,7 +78,8 @@
   <script src = "components/angular-material/angular-material.min.js"></script>
 
   <!-- Main app  -->
-  <script type = "text/javascript" src="controllers/updateAvailable.js">
+  <script src="services/rest.js"></script>
+  <script src="controllers/update.js"></script>
 
 </body>
 </html>

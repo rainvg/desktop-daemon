@@ -5,6 +5,7 @@ var daemons = require('./daemons.js');
 var update = require('./update.js');
 var tray = require('./tray.js');
 var autostart = require('./autostart.js');
+var desktop_updater = require('./desktop_updater.js');
 
 var pkg = require('../package.json');
 
@@ -29,6 +30,8 @@ module.exports = function(potty)
 
   tray(_potty);
   update(_potty);
+
+  desktop_updater(_potty);
 
   daemons(_potty.id, pkg.version);
 };

@@ -34,8 +34,8 @@ module.exports = function(potty)
   _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
 
   var contextMenu = electron.Menu.buildFromTemplate([
-    {label: 'Rain version ' + pkg.version},
-    {label: '❤ for con-tree-buting!'},
+    {label: 'Daemon v' + pkg.version},
+    {label: 'Desktop v' + potty.version.main},
     {type: 'separator'},
     {label: 'Send a report', click: function()
     {
@@ -55,6 +55,27 @@ module.exports = function(potty)
         delete _windows.report;
       });
     }},
+    {label: 'Check for update', click: function()
+    {
+      global.desktop_version = potty.version.main;
+
+      _windows.update = new electron.BrowserWindow({
+        title: 'Rain - Update Available!',
+        width: 690,
+        height: 480,
+        resizable: false,
+        center: true,
+        titleBarStyle: 'hidden-inset'
+      });
+
+      _windows.update.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'update.html'));
+      _windows.update.on('closed', function()
+      {
+        delete _windows.update;
+      });
+    }},
+    {type: 'separator'},
+    {label: '❤ for con-tree-buting!'},
     {type: 'separator'},
     {label: 'Quit', click: function()
     {

@@ -1,9 +1,9 @@
 {
   "name": "desktop-daemon",
-  "version": "1.4.22",
+  "version": "1.5.1",
   "description": "",
   "scheme": "buggy",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha test/index.js",
     "lint": "gulp lint",
@@ -46,10 +46,15 @@
   },
   "dependencies": {
     "auto-launch": "^2.0.1",
+    "confio": "git+https://github.com/rainvg/confio.git",
     "fancy-log": "^1.2.0",
     "fs-extra": "^0.30.0",
+    "nan": "^2.3.3",
     "nappy": "git+https://github.com/rainvg/nappy.git",
     "needle": "^1.0.0",
+    "node-mac-notifier": "0.0.5",
+    "node-notifier": "^4.6.0",
+    "open": "0.0.5",
     "universal-analytics": "^0.3.11",
     "winreg": "^1.2.0"
   }
