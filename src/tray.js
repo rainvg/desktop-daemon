@@ -31,7 +31,7 @@ module.exports = function(potty)
       electron.app.dock.hide();
   });
 
-  _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
+  _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo@5x.png'));
 
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Daemon v. ' + pkg.version},
@@ -85,7 +85,7 @@ module.exports = function(potty)
 
         for(var window in _windows)
           _windows[window].close();
-          
+
         electron.app.exit(0);
       });
     }}
