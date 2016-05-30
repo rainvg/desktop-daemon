@@ -2,9 +2,16 @@ var os = require('os');
 var path = require('path');
 var nappy = require('nappy');
 var needle = require('needle');
-var mac_notification = require('node-mac-notifier');
 var notifier = require('node-notifier');
 var open_url = require('open');
+
+try
+{
+  // Does not exists on Windows
+  var mac_notification = require('node-mac-notifier');
+}
+catch(e)
+{}
 
 // Settings
 

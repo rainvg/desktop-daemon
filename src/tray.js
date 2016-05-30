@@ -34,8 +34,8 @@ module.exports = function(potty)
   _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
 
   var contextMenu = electron.Menu.buildFromTemplate([
-    {label: 'Daemon v' + pkg.version},
-    {label: 'Desktop v' + potty.version.main},
+    {label: 'Daemon v. ' + pkg.version},
+    {label: 'Desktop v. ' + potty.version.main},
     {type: 'separator'},
     {label: 'Send a report', click: function()
     {
