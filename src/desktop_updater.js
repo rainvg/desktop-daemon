@@ -45,7 +45,7 @@ var __check__ = function()
           notifier.notify({
             title: 'Update available!',
             message: message,
-            icon: path.resolve(__dirname, '..', 'resources', 'logo.png'),
+            icon: path.resolve(__dirname, '..', 'resources', 'logo100@5x.png'),
             sound: true,
             wait: true
           }, function ()

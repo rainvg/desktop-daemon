@@ -31,7 +31,8 @@ module.exports = function(potty)
       electron.app.dock.hide();
   });
 
-  _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo@5x.png'));
+  var logo = process.platform === 'darwin' ? 'logo100.png' : 'logo256.png';
+  _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', logo));
 
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Daemon v. ' + pkg.version},
@@ -40,7 +41,7 @@ module.exports = function(potty)
     {label: 'Send a report', click: function()
     {
       _windows.report = new electron.BrowserWindow({
-        title: 'Rain - Send a report!',
+        title: 'Rain',
         width: 700,
         height: (process.platform === 'win32') ? 650 : 600,
         resizable: false,
@@ -60,7 +61,7 @@ module.exports = function(potty)
       global.desktop_version = potty.version.main;
 
       _windows.update = new electron.BrowserWindow({
-        title: 'Rain - Update Available!',
+        title: 'Rain',
         width: 690,
         height: (process.platform === 'win32') ? 530 : 480,
         resizable: false,
