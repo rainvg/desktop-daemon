@@ -4,6 +4,7 @@ var nappy = require('nappy');
 var needle = require('needle');
 var notifier = require('node-notifier');
 var open_url = require('open');
+var _windows = require('./globals')._windows;
 
 try
 {

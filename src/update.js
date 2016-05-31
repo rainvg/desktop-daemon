@@ -3,6 +3,7 @@ var path = require('path');
 var nappy = require('nappy');
 var needle = require('needle');
 var electron = require('electron');
+var _windows = require('./globals')._windows;
 
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
 
@@ -27,6 +28,11 @@ var __update__ = function()
         console.log('Update available.');
         _potty.update().then(function()
         {
+          console.log('Update succeded. Closing all windows');
+          
+          for(var i in _windows)
+            _windows[i].close();
+
           electron.app.exit(0);
         });
       }

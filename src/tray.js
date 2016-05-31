@@ -40,40 +40,51 @@ module.exports = function(potty)
     {type: 'separator'},
     {label: 'Send a report', click: function()
     {
-      _windows.report = new electron.BrowserWindow({
-        title: 'Rain',
-        width: 700,
-        height: (process.platform === 'win32') ? 650 : 600,
-        resizable: false,
-        center: true,
-        titleBarStyle: 'hidden-inset'
-      });
-
-      _windows.report.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'report.html'));
-
-      _windows.report.on('closed', function()
+      if(!_windows.hasOwnProperty('report'))
       {
-        delete _windows.report;
-      });
+        _windows.report = new electron.BrowserWindow({
+          title: 'Rain - Send a report!',
+          width: 700,
+          height: (process.platform === 'win32') ? 650 : 600,
+          resizable: false,
+          center: true,
+          titleBarStyle: 'hidden-inset'
+        });
+
+        _windows.report.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'report.html'));
+
+        _windows.report.on('closed', function()
+        {
+          delete _windows.report;
+        });
+      }
+      else
+        _windows.report.focus();
     }},
     {label: 'Check for update', click: function()
     {
       global.desktop_version = potty.version.main;
 
-      _windows.update = new electron.BrowserWindow({
-        title: 'Rain',
-        width: 690,
-        height: (process.platform === 'win32') ? 530 : 480,
-        resizable: false,
-        center: true,
-        titleBarStyle: 'hidden-inset'
-      });
-
-      _windows.update.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'update.html'));
-      _windows.update.on('closed', function()
+      if(!_windows.hasOwnProperty('update'))
       {
-        delete _windows.update;
-      });
+        _windows.update = new electron.BrowserWindow({
+          title: 'Rain - Update Available!',
+          width: 690,
+          height: (process.platform === 'win32') ? 530 : 480,
+          resizable: false,
+          center: true,
+          titleBarStyle: 'hidden-inset'
+        });
+
+        _windows.update.loadURL('file://' + path.resolve(__dirname, '..', 'resources', 'update.html'));
+
+        _windows.update.on('closed', function()
+        {
+          delete _windows.update;
+        });
+      }
+      else
+        _windows.update.focus();
     }},
     {type: 'separator'},
     {label: '❤ for con-tree-buting!'},
