@@ -31,7 +31,8 @@ module.exports = function(potty)
       electron.app.dock.hide();
   });
 
-  _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', 'logo.png'));
+  var logo = process.platform === 'darwin' ? 'logo100.png' : 'logo256.png';
+  _appIcon = new electron.Tray(path.resolve(__dirname, '..', 'resources', logo));
 
   var contextMenu = electron.Menu.buildFromTemplate([
     {label: 'Daemon v' + pkg.version},

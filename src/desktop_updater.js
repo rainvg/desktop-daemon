@@ -37,7 +37,7 @@ var __check__ = function()
           notifier.notify({
             title: 'Update available!',
             message: 'New Rain version available! Click here to update now',
-            icon: path.resolve(__dirname, '..', 'resources', 'logo@5x.png'),
+            icon: path.resolve(__dirname, '..', 'resources', 'logo100.png'),
             sound: true,
             wait: true
           }, function ()
