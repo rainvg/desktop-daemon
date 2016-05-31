@@ -10,7 +10,6 @@ var desktop_updater = require('./desktop_updater.js');
 var pkg = require('../package.json');
 
 var pkg = require(path.resolve(__dirname, '..', 'package.json'));
-var _windows = {};
 
 // Alerts
 
@@ -29,8 +28,8 @@ module.exports = function(potty)
 
   autostart();
 
-  tray(_potty, _windows);
-  update(_potty, _windows);
+  tray(_potty);
+  update(_potty);
 
   desktop_updater(_potty);
 

@@ -2,6 +2,7 @@ var path = require('path');
 var electron = require('electron');
 
 var pkg = require('../package.json');
+var _windows = require('./globals')._windows;
 
 // Alerts
 
@@ -13,7 +14,6 @@ electron.dialog.showErrorBox = function(title, content)
 // Members
 
 var _appIcon;
-var _windows = {};
 
 module.exports = function(potty)
 {
