@@ -41,7 +41,7 @@ module.exports = function(potty)
     {label: 'Send a report', click: function()
     {
       _windows.report = new electron.BrowserWindow({
-        title: 'Rain - Send a report!',
+        title: 'Rain',
         width: 700,
         height: 600,
         resizable: false,
@@ -61,7 +61,7 @@ module.exports = function(potty)
       global.desktop_version = potty.version.main;
 
       _windows.update = new electron.BrowserWindow({
-        title: 'Rain - Update Available!',
+        title: 'Rain',
         width: 690,
         height: 480,
         resizable: false,
