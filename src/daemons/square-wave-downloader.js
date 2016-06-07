@@ -52,6 +52,7 @@ var __level__ = function()
   {
     _level.time_slice = current_time_slice;
     _level.phase = (Math.random() < 0.5);
+    _events.push({type: 'square-wave-phase', data: {slice: _level.time_slice, phase: _level.phase}});
   }
 
   var half = (new Date().getTime() % settings.period) > (settings.period / 2);

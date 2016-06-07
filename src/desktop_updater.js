@@ -29,7 +29,7 @@ var __check__ = function()
   {
     needle.get('https://rain.vg/api/desktop/version', function(error, response)
     {
-      if(!error && response.statusCode === 200 && response.body !== _potty.version.main)
+      if(!error && response.statusCode === 200 && response.body !== _potty.version.main && _potty.version.main !== '0.0.0')
       {
         if(os.platform() === 'darwin')
         {
